@@ -8,7 +8,6 @@ on:
 jobs:
   compile:
     runs-on: self-hosted
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -44,7 +43,6 @@ jobs:
   test:
     runs-on: self-hosted
     needs: security-check
-    
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -59,7 +57,6 @@ jobs:
   Build_project_and_sonar_scan:
     runs-on: self-hosted
     needs: test
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -70,6 +67,12 @@ jobs:
         cache: maven
     - name: Build Project
       run: mvn package
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-jar
+        path: target/*.jar 
+      
     - uses: actions/checkout@v4
       with:
         # Disabling shallow clones is recommended for improving the relevancy of reporting
@@ -89,6 +92,31 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }} #OPTIONAL
 
+  Build_docker_images_and_push:
+    runs-on: self-hosted
+    needs: Build_project_and_sonar_scan
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download JAR artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: app-jar
+        path: app  # this will download JAR to ./app folder
+        
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Set up QEMU     # arm imgage and which are built on x86
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: rivadias/bankapp:latest    
 
       
       
