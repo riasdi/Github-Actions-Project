@@ -119,6 +119,7 @@ jobs:
         push: true
         tags: rivadias/bankapp:latest    
         file: ./Dockerfile
+
       
       
    
