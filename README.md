@@ -1,5 +1,5 @@
 
-### Deploying Application on EKS cluster using Github Action CI/CD
+### Deploying Application on EKS cluster using Github Actions CI/CD
 
 Create a instance and add it as a runner, run the following commannds
 ```cli
