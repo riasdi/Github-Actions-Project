@@ -17,7 +17,7 @@ tar xzf ./actions-runner-linux-x64-2.324.0.tar.gz
 ./run.sh
 ```
 
-create instance f or SonarQube and install docker on it
+Create instance for SonarQube and install docker on it
 
 ```cli
 sudo apt install
@@ -32,14 +32,14 @@ docker run -d --name sonar -p 9000:9000 SonarQube:lts-community
 
 ```
 
-using SonarQube_ip_address:9000 open the sonaeqube page
+Using SonarQube_ip_address:9000 open the sonaeqube page
 
 Generate token for SonarQube and store it in secrets of GitHub 
 sonar_token
 sonar_host_url
 
 
-Lets install Docker on runner
+Let's install Docker on runner
 ```cli
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -63,9 +63,9 @@ newgrp docker
 
 ```
 
-store Dockerhub username and password in secrets
+sStore Dockerhub username and password in secrets
 
-lets again create a instance for EKS cluster
+let's again create a instance for EKS cluster
 
 Install AWS cli
 ```cli
